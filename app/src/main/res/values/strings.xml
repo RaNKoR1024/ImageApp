@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImageApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">search</string>
+    <string name="google_images">Google images</string>
+</resources>
