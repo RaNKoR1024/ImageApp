@@ -1,20 +1,34 @@
 package com.example.imageapp.ui.imagesource
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.imageapp.R
+import androidx.fragment.app.Fragment
+import com.example.imageapp.databinding.FragmentImageSourceBinding
+import com.example.imageapp.ui.MainActivity
 
 class ImageSourceFragment : Fragment() {
+
+    private lateinit var binding: FragmentImageSourceBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_image_source, container, false)
+    ): View {
+        binding = FragmentImageSourceBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mainActivity = activity as MainActivity
+        with(mainActivity.viewModel) {
+            imageList.observe(viewLifecycleOwner, {
+                binding.wvImage.loadUrl(it.images[currentPosition].link)
+            })
+        }
+
     }
 
 }

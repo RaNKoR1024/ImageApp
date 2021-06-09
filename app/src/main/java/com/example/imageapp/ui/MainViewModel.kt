@@ -9,6 +9,7 @@ import com.example.imageapp.ImageApp
 import com.example.imageapp.data.remote.serp.ImageListResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.awaitResponse
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -18,9 +19,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val imageList: LiveData<ImageListResponse>
         get() = _imageList
 
+    var currentPosition = 0
+
     fun searchImages(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            imageApp.serpApi.getImagesList(name)
+            val response = imageApp.serpApi.getImagesList(name).awaitResponse()
+            if (response.isSuccessful) {
+                _imageList.postValue(response.body()!!)
+            } else {
+                println(response.errorBody())
+            }
         }
     }
 }

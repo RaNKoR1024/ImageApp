@@ -25,5 +25,4 @@ class ImageApp : Application() {
         serpApi = retrofit.create(SerpApi::class.java)
 
     }
-
 }
