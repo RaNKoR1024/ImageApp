@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.example.imageapp.R
 import com.example.imageapp.databinding.FragmentFullImagesBinding
 import com.example.imageapp.ui.MainActivity
 
@@ -27,19 +25,14 @@ class FullImagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ViewPagerAdapter(
-            ContextCompat.getDrawable(
-                requireActivity(),
-                R.drawable.error
-            )!!
-        )
+        adapter = ViewPagerAdapter()
 
         with(binding) {
             vpImages.adapter = adapter
 
             val mainActivity = activity as MainActivity
-            mainActivity.viewModel.imageList.observe(viewLifecycleOwner, {
-                adapter.setData(it.images)
+            mainActivity.viewModel.imageFullList.observe(viewLifecycleOwner, {
+                adapter.setData(it)
                 vpImages.currentItem = mainActivity.viewModel.currentPosition
             })
             vpImages.registerOnPageChangeCallback(

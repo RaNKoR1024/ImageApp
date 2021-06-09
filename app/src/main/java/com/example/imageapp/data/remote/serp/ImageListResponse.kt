@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ImageListResponse(
     @SerializedName("images_results")
-    val images: ArrayList<SerpImage>
+    val images: MutableList<SerpImage>
 )
 
 data class SerpImage(

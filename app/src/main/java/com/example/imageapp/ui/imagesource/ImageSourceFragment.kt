@@ -24,9 +24,7 @@ class ImageSourceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
         with(mainActivity.viewModel) {
-            imageList.observe(viewLifecycleOwner, {
-                binding.wvImage.loadUrl(it.images[currentPosition].link)
-            })
+            binding.wvImage.loadUrl(listImageInfo[currentPosition].link)
         }
 
     }
