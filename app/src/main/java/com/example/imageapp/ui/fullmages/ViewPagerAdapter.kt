@@ -43,5 +43,4 @@ class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>(
         updatedDataSet = newDataSet
     }
 
-
 }
