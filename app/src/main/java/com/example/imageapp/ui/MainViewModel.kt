@@ -11,7 +11,6 @@ import com.example.imageapp.GlideApp
 import com.example.imageapp.ImageApp
 import com.example.imageapp.data.remote.serp.SerpImage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
 
@@ -31,15 +30,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var currentPosition = 0
 
-    private var job: Job? = null
+    private var count = 0
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun searchImages(name: String) {
-        if (job != null && job!!.isActive) {
-            job!!.cancel()
-            System.gc()
-        }
-        job = viewModelScope.launch(Dispatchers.Default) {
+        count += 1
+        viewModelScope.launch(Dispatchers.Default) {
             _imageFullList.postValue(emptyList())
             val response = imageApp.serpApi.getImagesList(name).awaitResponse()
             if (response.isSuccessful) {
@@ -54,18 +50,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
                 _imageThumbnailList.postValue(listTImages)
                 val listFImages = mutableListOf<Bitmap>()
+                val currentCount = count
                 listImageInfo.forEach {
-                    val bitmap = try {
-                        GlideApp.with(imageApp)
-                            .asBitmap()
-                            .load(it.original)
-                            .submit()
-                            .get()
-                    } catch (e: Exception) {
-                        listTImages[it.position - 1]
+                    if (currentCount == count) {
+                        val bitmap = try {
+                            GlideApp.with(imageApp)
+                                .asBitmap()
+                                .override(512, 512)
+                                .centerInside()
+                                .load(it.original)
+                                .submit()
+                                .get()
+                        } catch (e: Exception) {
+                            listTImages[it.position - 1]
+                        }
+                        println(it.position)
+                        listFImages.add(bitmap)
+                        _imageFullList.postValue(listFImages)
                     }
-                    listFImages.add(bitmap)
-                    _imageFullList.postValue(listFImages)
                 }
             } else {
                 println(response.errorBody())
