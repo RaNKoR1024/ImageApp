@@ -40,7 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val response = imageApp.serpApi.getImagesList(name).awaitResponse()
             if (response.isSuccessful) {
                 listImageInfo = response.body()!!.images
-
+                val coroutineCount = count
                 val listTImages = List(listImageInfo.size) {
                     GlideApp.with(imageApp)
                         .asBitmap()
@@ -48,11 +48,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         .submit()
                         .get()
                 }
-                _imageThumbnailList.postValue(listTImages)
+                if (coroutineCount == count) {
+                    _imageThumbnailList.postValue(listTImages)
+                }
                 val listFImages = mutableListOf<Bitmap>()
-                val currentCount = count
+
                 listImageInfo.forEach {
-                    if (currentCount == count) {
+                    if (coroutineCount == count) {
                         val bitmap = try {
                             GlideApp.with(imageApp)
                                 .asBitmap()
