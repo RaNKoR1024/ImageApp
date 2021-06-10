@@ -53,20 +53,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         .get()
                 }
                 _imageThumbnailList.postValue(listTImages)
-//                val listFImages = mutableListOf<Bitmap>()
-//                listImageInfo.forEach {
-//                    val bitmap = try {
-//                        GlideApp.with(imageApp)
-//                            .asBitmap()
-//                            .load(it.original)
-//                            .submit()
-//                            .get()
-//                    } catch (e: Exception) {
-//                        listTImages[it.position - 1]
-//                    }
-//                    listFImages.add(bitmap)
-//                    _imageFullList.postValue(listFImages)
-//                }
+                val listFImages = mutableListOf<Bitmap>()
+                listImageInfo.forEach {
+                    val bitmap = try {
+                        GlideApp.with(imageApp)
+                            .asBitmap()
+                            .load(it.original)
+                            .submit()
+                            .get()
+                    } catch (e: Exception) {
+                        listTImages[it.position - 1]
+                    }
+                    listFImages.add(bitmap)
+                    _imageFullList.postValue(listFImages)
+                }
             } else {
                 println(response.errorBody())
             }
