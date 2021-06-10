@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
+import com.example.imageapp.GlideApp
 import com.example.imageapp.ImageApp
 import com.example.imageapp.data.remote.serp.SerpImage
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +46,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 listImageInfo = response.body()!!.images
 
                 val listTImages = List(listImageInfo.size) {
-                    Glide.with(imageApp)
+                    GlideApp.with(imageApp)
                         .asBitmap()
                         .load(listImageInfo[it].thumbnail)
                         .submit()
