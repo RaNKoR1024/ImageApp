@@ -32,11 +32,9 @@ class FullImagesFragment : Fragment() {
 
             val mainActivity = activity as MainActivity
             with(mainActivity) {
-                setLoading(true)
                 viewModel.imageThumbnailList.observe(viewLifecycleOwner, {
                     adapter.setData(it)
                     vpImages.setCurrentItem(mainActivity.viewModel.currentPosition, false)
-                    setLoading(false)
                 })
                 viewModel.imageFullList.observe(viewLifecycleOwner, {
                     adapter.setUpdatedData(it)

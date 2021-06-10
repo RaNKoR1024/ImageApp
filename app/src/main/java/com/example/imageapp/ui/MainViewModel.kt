@@ -66,7 +66,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         } catch (e: Exception) {
                             listTImages[it.position - 1]
                         }
-                        println(it.position)
                         listFImages.add(bitmap)
                         _imageFullList.postValue(listFImages)
                     }
