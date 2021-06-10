@@ -31,9 +31,11 @@ class FullImagesFragment : Fragment() {
             vpImages.adapter = adapter
 
             val mainActivity = activity as MainActivity
+            mainActivity.setLoading(true)
             mainActivity.viewModel.imageFullList.observe(viewLifecycleOwner, {
                 adapter.setData(it)
                 vpImages.currentItem = mainActivity.viewModel.currentPosition
+                mainActivity.setLoading(false)
             })
             vpImages.registerOnPageChangeCallback(
                 object : ViewPager2.OnPageChangeCallback() {

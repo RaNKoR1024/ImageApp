@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.fullImagesFragment -> {
                         menuInflater.inflate(R.menu.source_menu, menu)
+
                     }
                 }
             }

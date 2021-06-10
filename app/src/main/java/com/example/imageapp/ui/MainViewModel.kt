@@ -7,9 +7,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
 import com.example.imageapp.GlideApp
 import com.example.imageapp.ImageApp
-import com.example.imageapp.R
 import com.example.imageapp.data.remote.serp.SerpImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,20 +38,32 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (response.isSuccessful) {
                 listImageInfo = response.body()!!.images
                 val listTImages = List(listImageInfo.size) {
-                    GlideApp.with(imageApp)
+                    Glide.with(imageApp)
                         .asBitmap()
+                        .override(128, 128)
+                        .centerInside()
                         .load(listImageInfo[it].thumbnail)
                         .submit()
                         .get()
                 }
                 _imageThumbnailList.postValue(listTImages)
-                val listFImages = List(listImageInfo.size) {
-                    GlideApp.with(imageApp)
-                        .asBitmap()
-                        .error(imageApp.getDrawable(R.drawable.error))
-                        .load(listImageInfo[it].original)
-                        .submit()
-                        .get()
+                val listFImages = mutableListOf<Bitmap>()
+                listImageInfo.forEach {
+                    try {
+                        listFImages.add(
+                            GlideApp.with(imageApp)
+                                .asBitmap()
+                                .override(512, 512)
+                                .centerInside()
+                                .load(it.original)
+                                .submit()
+                                .get()
+                        )
+                        println(it.position)
+                    } catch (e: Exception) {
+                        listFImages.add(listTImages[it.position])
+                    }
+
                 }
                 _imageFullList.postValue(listFImages)
 
