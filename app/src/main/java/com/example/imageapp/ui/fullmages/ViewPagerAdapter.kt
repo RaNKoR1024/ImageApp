@@ -9,6 +9,7 @@ import com.example.imageapp.databinding.ItemVpImageBinding
 class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
 
     private var dataSet = emptyList<Bitmap>()
+    private var updatedDataSet = emptyList<Bitmap>()
 
     inner class ImageViewHolder(val binding: ItemVpImageBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -25,13 +26,21 @@ class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>(
     override fun getItemCount() = dataSet.size
 
     override fun onBindViewHolder(holder: ViewPagerAdapter.ImageViewHolder, position: Int) {
-        val currentItem = dataSet[position]
+        val currentItem = if (updatedDataSet.size <= position) {
+            dataSet[position]
+        } else {
+            updatedDataSet[position]
+        }
         holder.binding.vpImage.setImageBitmap(currentItem)
     }
 
     fun setData(newDataSet: List<Bitmap>) {
         dataSet = newDataSet
         notifyDataSetChanged()
+    }
+
+    fun setUpdatedData(newDataSet: List<Bitmap>) {
+        updatedDataSet = newDataSet
     }
 
 

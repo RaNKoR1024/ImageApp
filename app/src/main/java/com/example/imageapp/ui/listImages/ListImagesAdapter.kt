@@ -27,6 +27,7 @@ class ListImagesAdapter(private val onClick: (Int) -> Unit) :
 
         holder.binding.ivImage.setImageBitmap(currentItem)
         holder.itemView.setOnClickListener {
+            println(position)
             onClick.invoke(position)
         }
 

@@ -31,12 +31,17 @@ class FullImagesFragment : Fragment() {
             vpImages.adapter = adapter
 
             val mainActivity = activity as MainActivity
-            mainActivity.setLoading(true)
-            mainActivity.viewModel.imageFullList.observe(viewLifecycleOwner, {
-                adapter.setData(it)
-                vpImages.currentItem = mainActivity.viewModel.currentPosition
-                mainActivity.setLoading(false)
-            })
+            with(mainActivity) {
+                setLoading(true)
+                viewModel.imageThumbnailList.observe(viewLifecycleOwner, {
+                    adapter.setData(it)
+                    vpImages.setCurrentItem(mainActivity.viewModel.currentPosition, false)
+                    setLoading(false)
+                })
+                viewModel.imageFullList.observe(viewLifecycleOwner, {
+                    adapter.setUpdatedData(it)
+                })
+            }
             vpImages.registerOnPageChangeCallback(
                 object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
