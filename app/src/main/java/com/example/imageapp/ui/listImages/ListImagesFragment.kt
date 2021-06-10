@@ -37,8 +37,8 @@ class ListImagesFragment : Fragment() {
             rvImages.layoutManager = GridLayoutManager(context, 4)
             rvImages.adapter = adapter
 
-            mainActivity.viewModel.imageList.observe(viewLifecycleOwner, {
-                adapter.setData(it.images)
+            mainActivity.viewModel.imageThumbnailList.observe(viewLifecycleOwner, {
+                adapter.setData(it)
                 mainActivity.setLoading(false)
             })
         }

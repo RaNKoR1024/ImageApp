@@ -1,18 +1,15 @@
 package com.example.imageapp.ui.fullmages
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.imageapp.GlideApp
-import com.example.imageapp.R
-import com.example.imageapp.data.remote.serp.SerpImage
 import com.example.imageapp.databinding.ItemVpImageBinding
 
-class ViewPagerAdapter(private val errorDrawable: Drawable) :
-    RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
+class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
 
-    private var dataSet = emptyList<SerpImage>()
+    private var dataSet = emptyList<Bitmap>()
+    private var updatedDataSet = emptyList<Bitmap>()
 
     inner class ImageViewHolder(val binding: ItemVpImageBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -29,17 +26,21 @@ class ViewPagerAdapter(private val errorDrawable: Drawable) :
     override fun getItemCount() = dataSet.size
 
     override fun onBindViewHolder(holder: ViewPagerAdapter.ImageViewHolder, position: Int) {
-        val currentItem = dataSet[position]
-        GlideApp.with(holder.itemView)
-            .load(currentItem.original)
-            .placeholder(R.drawable.ic_baseline_image_24)
-            .into(holder.binding.vpImage)
-            .onLoadFailed(errorDrawable)
+        val currentItem = if (updatedDataSet.size <= position) {
+            dataSet[position]
+        } else {
+            updatedDataSet[position]
+        }
+        holder.binding.vpImage.setImageBitmap(currentItem)
     }
 
-    fun setData(newDataSet: List<SerpImage>) {
+    fun setData(newDataSet: List<Bitmap>) {
         dataSet = newDataSet
         notifyDataSetChanged()
+    }
+
+    fun setUpdatedData(newDataSet: List<Bitmap>) {
+        updatedDataSet = newDataSet
     }
 
 
